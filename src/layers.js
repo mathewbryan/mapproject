@@ -1,6 +1,5 @@
 import { ScatterplotLayer, HexagonLayer, ScreenGridLayer, IconLayer, HeatmapLayer } from 'deck.gl';
 import iconAtlas from './placeholder.svg'
-import GL from '@luma.gl/constants';
 
 const COLOR1 = [0, 128, 255];
 
