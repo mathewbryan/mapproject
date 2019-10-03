@@ -10,10 +10,11 @@ import renderLayers from './layers'
 // import originalData from './latest_pos';
 import { MapController } from '@deck.gl/core';
 import { FlyToInterpolator } from 'deck.gl';
+import key from './key'
 
 
 // Set your mapbox access token here
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWF0aGV3YnJ5YW4iLCJhIjoiY2p6Mm42djVsMDdmaDNjbHU5azM1Z2h6eSJ9.6p76dcC4NJhKb-0k1I6YKw';
+const MAPBOX_ACCESS_TOKEN = key;
 
 
 let malaysiaState = {
