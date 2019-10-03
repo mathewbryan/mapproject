@@ -123,7 +123,7 @@ export default function renderLayers(props) {
         [255, 255, 255],
       ],
       gpuAggregation: true,
-      intensity: .5 ,
+      intensity: .7,
       threshold: .05,
       radiusPixels: 30,
       getWeight: 20, 

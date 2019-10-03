@@ -7,13 +7,13 @@ import {
 import DeckGL from '@deck.gl/react';
 import { StaticMap } from 'react-map-gl';
 import renderLayers from './layers'
-import originalData from './latest_pos';
+// import originalData from './latest_pos';
 import { MapController } from '@deck.gl/core';
 import { FlyToInterpolator } from 'deck.gl';
 
 
 // Set your mapbox access token here
-const MAPBOX_ACCESS_TOKEN = '';
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibWF0aGV3YnJ5YW4iLCJhIjoiY2p6Mm42djVsMDdmaDNjbHU5azM1Z2h6eSJ9.6p76dcC4NJhKb-0k1I6YKw';
 
 
 let malaysiaState = {
@@ -43,16 +43,16 @@ let bostonState = {
 };
 
 let europeState = {
-    longitude: 2.3522,
-    latitude: 48.8566,
-    zoom: 5,
-    maxZoom: 16,
-    pitch: 50,
-    bearing: 0,
-    transitionInterpolator: new FlyToInterpolator(),
-    transitionDuration: 8000,
-    tranistionEasing: 200,
-    area: 'europe',
+  longitude: 2.3522,
+  latitude: 48.8566,
+  zoom: 5,
+  maxZoom: 16,
+  pitch: 50,
+  bearing: 0,
+  transitionInterpolator: new FlyToInterpolator(),
+  transitionDuration: 8000,
+  tranistionEasing: 200,
+  area: 'europe',
 };
 
 
@@ -61,11 +61,6 @@ class MapApp extends React.Component {
     super(props)
     this.state = {
       style: 'mapbox://styles/mapbox/dark-v9',
-      hover: {
-        x: 0,
-        y: 0,
-        hoveredObject: null
-      },
       viewState: {
         longitude: 2.3522,
         latitude: 48.8566,
@@ -97,9 +92,10 @@ class MapApp extends React.Component {
       }
     })
     let data = await api_call.json();
-    console.log(data);
+    console.log(data.data);
+    this.calculateData(data)
   };
-  
+
 
   onStyleChange = style => {
     this.setState({ style });
@@ -108,59 +104,56 @@ class MapApp extends React.Component {
     this.setState({ settings });
   };
 
-  changeViewState = () =>{
-    if (this.state.viewState.area == 'europe'){
-
-    setTimeout(() => {
-      this.setState({
-      viewState: malaysiaState
-    })
-  }, 10000);}
-  else if (this.state.viewState.area == 'malaysia'){
-    setTimeout(() => {
-      this.setState({
-      viewState: bostonState
-    })
-  }, 10000);
-}
-  else {
-    setTimeout(() => {
-      this.setState({
-      viewState: europeState
-    })
-  }, 20000);
-};  
+   changeViewState = () => {
     
-  
-}
+    if (this.state.viewState.area === 'europe') {
+
+      setTimeout(() => {
+        this.setState({
+          viewState: malaysiaState
+        })
+      }, 20000);
+    }
+    else if (this.state.viewState.area === 'malaysia') {
+      setTimeout(() => {
+        this.setState({
+          viewState: bostonState
+        })
+      }, 20000);
+    }
+    else {
+      setTimeout(() => {
+        this.setState({
+          viewState: europeState
+        })
+      }, 20000);
+    };
+  }
+
 
   // runs calculateDate function when the page loads
   componentDidMount() {
     this.fetchData()
-    this.calculateData();
-    
-    // this.changeViewStateBoston()
+    setInterval(this.fetchData, 30000);
   }
 
-
-
   // pulls data from source and adds it to the state in the required format
-  calculateData = () => {
+  calculateData = (data) => {
     let newData = {
       coordinates: []
     }
-    for (let i = 0; i < originalData.data.length; i++) {
-      let lat = parseFloat(originalData.data[i].lat)
+    for (let i = 0; i < data.data.length; i++) {
+      let lat = parseFloat(data.data[i].lat)
 
-      let lng = parseFloat(originalData.data[i].lng)
-
+      let lng = parseFloat(data.data[i].lng)
+      
       newData.coordinates.push([lng, lat])
     }
     delete this.state.locationPoints
-    
+
     this.setState({ locationPoints: newData.coordinates })
     newData.coordinates = []
-    
+
   }
   _onViewportChange = viewState => {
     this.setState({ viewState });
@@ -200,6 +193,7 @@ class MapApp extends React.Component {
         </DeckGL>
 
       </div>
+
     );
   }
 }
